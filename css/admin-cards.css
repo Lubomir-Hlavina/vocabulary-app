@@ -22,14 +22,12 @@ main {
     outline: none;
     font-size: 18px;
     border: none;
-    background-color: rgba(239, 236, 236, 0.849);
+    background-color: rgba(250, 235, 215, 0.849);;
 }
 
 .filter-input:focus {
-    background-color: rgba(250, 235, 215, 0.849);
+    background-color: rgba(252, 228, 198, 0.849);
 }
-
-
 
 /* Cards list section */
 .all-cards {
