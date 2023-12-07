@@ -1,0 +1,79 @@
+main {
+    min-height: 100vh;
+}
+
+/* Main heading section */
+.main-heading h1 {
+    text-align: center;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    font-size: 2.5rem;
+}
+
+/* Filter section */
+.filter {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filter-input {
+    width: 300px;
+    padding: 10px;
+    outline: none;
+    font-size: 18px;
+    border: none;
+    background-color: rgba(239, 236, 236, 0.849);
+}
+
+.filter-input:focus {
+    background-color: rgba(250, 235, 215, 0.849);
+}
+
+
+
+/* Cards list section */
+.all-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 30px;
+}
+
+.one-card {
+    width: 300px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(250, 235, 215, 0.849);
+    text-align: center;
+    border-radius: 10px;
+    transition: 0.3s;
+    position: relative;
+    padding: 1.5em 0 1.5em 0;
+}
+
+.one-card:hover {
+    transform: scale(1.05);
+}
+
+.one-card a {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    text-decoration: none;
+    padding: 5px 5px;
+    background: #a17e20;
+    color: white;
+}
+
+.names {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+}
