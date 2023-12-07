@@ -1,5 +1,5 @@
-.one-card {
-    min-height: 100vh;
+section {
+    height: calc(100vh - 70px - 70px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,14 +7,29 @@
 }
 
 .one-card-box {
-    width: 400px;
-    min-height: 180px;
-    background-color: rgba(250, 232, 215, 0.8);
+    position: relative; 
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 400px;
+    min-height: 200px;
     border-radius: 15px;
+    background-color: rgba(250, 232, 215, 0.8);
+}
+
+.show-one-card {
+    position: absolute; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    color: whitesmoke;
+    background: rgb(122, 188, 23);
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
+.show-one-card:hover {
+    background: rgb(141, 217, 26);
 }
 
 .names {
@@ -23,35 +38,54 @@
     flex-direction: column;
     justify-content: space-around;
     text-align: center;
-    padding: 10px 0 10px 0;
 }
 
 .names h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
-.one-card-buttons button {
+.one-card-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.one-card-buttons a  {
     text-decoration: none;
     font-size: 18px;
     padding: 8px 16px;
-    color: white;
     display: inline-block;
     margin-top: 10px;
     border-radius: 15px;
+    color: white;
 }
 
-/* .edit-one-card {
-    background-color: green;
+.previous-one-card{
+    background: red;
 }
 
-.edit-one-card:hover {
-    background-color: rgb(0, 109, 0);
+.random-one-card {
+    background: orange;
 }
 
-.delete-one-card {
-    background-color: rgb(214, 25, 25);
+.next-one-card {
+    background: green;
 }
 
-.delete-one-card:hover {
-    background-color: rgb(170, 20, 20);
-} */
+#first-name {
+    display: block;
+}
+
+#second-name {
+    display: none;
+}
+
+
+.flipped #first-name {
+    display: none;
+}
+
+.flipped #second-name {
+    display: block;
+}
