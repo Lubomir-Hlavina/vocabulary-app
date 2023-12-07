@@ -119,5 +119,68 @@ class Card
             echo "Typ chyby: " . $e->getMessage();
         }
     }
+
+
+    public static function getRandomCard($connection, $columns = "*")
+    {
+        $sql = "SELECT $columns
+            FROM card
+            ORDER BY RAND()
+            LIMIT 1";
+
+        $stmt = $connection->prepare($sql);
+
+        try {
+            if ($stmt->execute()) {
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } else {
+                throw new Exception("Získanie náhodnej karty zlyhalo");
+            }
+        } catch (Exception $e) {
+            error_log("Chyba vo funkcii getRandomCard\n", 3, "../errors/error.log");
+            echo "Typ chyby: " . $e->getMessage();
+        }
+    }
+
+    public static function getNextCardID($connection, $currentCardID)
+    {
+        $sql = "SELECT id
+            FROM card
+            WHERE id > :currentCardID
+            ORDER BY id ASC
+            LIMIT 1";
+
+        return self::getAdjacentCardID($connection, $sql, $currentCardID);
+    }
+
+    public static function getPreviousCardID($connection, $currentCardID)
+    {
+        $sql = "SELECT id
+            FROM card
+            WHERE id < :currentCardID
+            ORDER BY id DESC
+            LIMIT 1";
+
+        return self::getAdjacentCardID($connection, $sql, $currentCardID);
+    }
+
+    private static function getAdjacentCardID($connection, $sql, $currentCardID)
+    {
+        $stmt = $connection->prepare($sql);
+        $stmt->bindValue(":currentCardID", $currentCardID, PDO::PARAM_INT);
+
+        try {
+            if ($stmt->execute()) {
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $result ? $result['id'] : $currentCardID;
+            } else {
+                throw new Exception("Získanie ID susednej karty zlyhalo");
+            }
+        } catch (Exception $e) {
+            error_log("Chyba vo funkcii getAdjacentCardID\n", 3, "../errors/error.log");
+            echo "Typ chyby: " . $e->getMessage();
+        }
+    }
+
 }
 
