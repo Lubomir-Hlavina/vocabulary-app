@@ -1,3 +1,50 @@
+<?php
+require "../classes/Database.php";
+require "../classes/Url.php";
+require "../classes/Card.php";
+require "../classes/Auth.php";
+
+session_start();
+
+if (!Auth::isLoggedIn()) {
+    die("Nepovolený přístup");
+}
+
+$database = new Database();
+$connection = $database->connectionDB();
+
+// Získa aktuálne ID karty z session alebo nastaví na nulu
+$currentCardID = isset($_SESSION['currentCardID']) ? $_SESSION['currentCardID'] : 0;
+
+if (isset($_GET["action"])) {
+    if ($_GET["action"] == "next") {
+        // Získa nasledujúce ID karty
+        $currentCardID = Card::getNextCardID($connection, $currentCardID);
+    } elseif ($_GET["action"] == "previous") {
+        // Získa predchádzajúce ID karty
+        $currentCardID = Card::getPreviousCardID($connection, $currentCardID);
+    }
+}
+
+if (isset($_GET["action"])) {
+    if ($_GET["action"] == "next") {
+        // Získa nasledujúce ID karty
+        $currentCardID = Card::getNextCardID($connection, $currentCardID);
+    } elseif ($_GET["action"] == "previous") {
+        // Získa predchádzajúce ID karty
+        $currentCardID = Card::getPreviousCardID($connection, $currentCardID);
+    } elseif ($_GET["action"] == "random") {
+        // Získa náhodné ID karty
+        $currentCardID = Card::getRandomCard($connection)["id"];
+    }
+}
+// Získa kartu podľa aktuálneho ID
+$currentCard = Card::getCard($connection, $currentCardID);
+
+// Uloží aktuálne ID karty do session
+$_SESSION['currentCardID'] = $currentCardID;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,42 +57,48 @@
     <link rel="stylesheet" href="../css/footer.css">
     <title>Kartičky</title>
     <link rel="stylesheet" href="../css/admin-training.css">
+    <script src="https://kit.fontawesome.com/0fe3234472.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
 
     <?php require "../assets/admin-header.php"; ?>
 
-
-    <main>
+    <main class="training-main">
         <section>
-
-
             <div class="one-card-box">
-
-
-
-                <div class="names">
-                    <h2>
-                        <!-- <?= htmlspecialchars($cards["first_language"]) ?> -->
-                        First language
-                    </h2>
-                    <h2>
-                        <!-- <?= htmlspecialchars($cards["second_language"]) ?> -->
-                        Second language
-                    </h2>
-                </div>
+                <?php if ($currentCard && is_array($currentCard)): ?>
+                    <div class="names">
+                        <h2 id="first-name">
+                            <?= htmlspecialchars($currentCard["first_language"]) ?>
+                        </h2>
+                        <h2 id="second-name">
+                            <?= htmlspecialchars($currentCard["second_language"]) ?>
+                        </h2>
+                    </div>
+                    <a class="show-one-card" onclick="toggleClasses()">
+                        <i class="fa-solid fa-retweet"></i>
+                    </a>
+                <?php else: ?>
+                    <p>Nie sú dostupné žiadne karty.</p>
+                <?php endif; ?>
             </div>
 
 
             <div class="one-card-buttons">
-                <button class="next-one-card">Ďalej</button>
-                <button class="show-one-card">Otočiť</button>
-                <button class="previous-one-card">Späť</button>
+                <a href="?action=previous" class="previous-one-card">Späť</a>
+                <!-- <button class="show-one-card" onclick="toggleClasses()">Otočiť</button> -->
+                <a href="?action=random" class="random-one-card">Náhodná karta</a>
+                <a href="?action=next" class="next-one-card">Ďalej</a>
             </div>
-
         </section>
     </main>
+
+    <?php require "../assets/footer.php"; ?>
+
+    <script src="../js/toggleCard.js"></script>
+
 </body>
 
 </html>
