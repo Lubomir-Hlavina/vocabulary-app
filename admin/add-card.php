@@ -7,7 +7,7 @@ require "../classes/Auth.php";
 
 session_start();
 
-if(!Auth::isLoggedIn()) {
+if (!Auth::isLoggedIn()) {
     die("Nepovolený prístup");
 }
 
@@ -15,7 +15,7 @@ $first_language = null;
 $second_language = null;
 
 
-if($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $first_language = $_POST["first_language"];
     $second_language = $_POST["second_language"];
@@ -23,9 +23,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $database = new Database();
     $connection = $database->connectionDB();
 
-    $id = Card::createCard($connection, $first_language, $second_language, );
+    $id = Card::createCard($connection, $first_language, $second_language);
 
-    if($id) {
+    if ($id) {
         Url::redirectUrl("/words/admin/cards.php?id=$id");
     } else {
         echo "Karta nebola vytvorená";
