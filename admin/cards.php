@@ -6,7 +6,7 @@ require "../classes/Card.php";
 
 session_start();
 
-// Pokiaľ nie je prihláseny, tak die
+// Pokiaľ nie je prihláseny, tak die.
 if (!Auth::isLoggedIn()) {
     die("Nepovolený prístup");
 }
@@ -15,8 +15,7 @@ $database = new Database();
 $connection = $database->connectionDB();
 
 
-$cards = Card::getAllCards($connection, "id, first_language, second_language");
-
+$cards = Card::getUserCards($connection, "id, first_language, second_language");
 ?>
 
 <!DOCTYPE html>
