@@ -7,14 +7,14 @@ require "../classes/Auth.php";
 session_start();
 
 if (!Auth::isLoggedIn()) {
-    die("Nepovolený přístup");
+    die("Nepovolený prístup");
 }
 
 $database = new Database();
 $connection = $database->connectionDB();
 
 // Získa aktuálne ID karty z session alebo nastaví na nulu
-$currentCardID = isset($_SESSION['currentCardID']) ? $_SESSION['currentCardID'] : 0;
+$currentCardID = isset($_SESSION['currentCardID']) ? $_SESSION['currentCardID'] : 1;
 
 if (isset($_GET["action"])) {
     if ($_GET["action"] == "next") {
@@ -38,11 +38,10 @@ if (isset($_GET["action"])) {
         $currentCardID = Card::getRandomCard($connection)["id"];
     }
 }
-// Získa kartu podľa aktuálneho ID
-$currentCard = Card::getCard($connection, $currentCardID);
 
-// Uloží aktuálne ID karty do session
-$_SESSION['currentCardID'] = $currentCardID;
+$currentCard = Card::getRandomCard($connection, "id, first_language, second_language");
+
+$_SESSION[0] = $currentCardID;
 ?>
 
 <!DOCTYPE html>
@@ -58,6 +57,7 @@ $_SESSION['currentCardID'] = $currentCardID;
     <title>Kartičky</title>
     <link rel="stylesheet" href="../css/admin-training.css">
     <script src="https://kit.fontawesome.com/0fe3234472.js" crossorigin="anonymous"></script>
+    <script src="../js/toggleCard.js"></script>
 
 </head>
 
@@ -82,13 +82,16 @@ $_SESSION['currentCardID'] = $currentCardID;
                     </a>
                 <?php else: ?>
                     <p>Nie sú dostupné žiadne karty.</p>
+
+                    <?php
+                    print_r($_SESSION);
+                    ?>
                 <?php endif; ?>
             </div>
 
 
             <div class="one-card-buttons">
                 <a href="?action=previous" class="previous-one-card">Späť</a>
-                <!-- <button class="show-one-card" onclick="toggleClasses()">Otočiť</button> -->
                 <a href="?action=random" class="random-one-card">Náhodná karta</a>
                 <a href="?action=next" class="next-one-card">Ďalej</a>
             </div>
@@ -96,8 +99,6 @@ $_SESSION['currentCardID'] = $currentCardID;
     </main>
 
     <?php require "../assets/footer.php"; ?>
-
-    <script src="../js/toggleCard.js"></script>
 
 </body>
 
