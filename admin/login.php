@@ -15,15 +15,15 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $log_password = $_POST["login-password"];
 
     if(User::authentication($connection, $log_email, $log_password)) {
-        // Získání ID uživatele
+        // Získánie ID uživateľa
         $id = User::getUserId($connection, $log_email);
 
-        // Zabraňuje provedení tzv. fixation attack. Více zde: https://owasp.org/www-community/attacks/Session_fixation
+        // Zabraňuje preveiesť tzv. fixation attack. Info: https://owasp.org/www-community/attacks/Session_fixation
         session_regenerate_id(true);
 
-        // Nastavení, že je uživatel přihlášený
+        // Nastavenie, že je uživatel prihlásený
         $_SESSION["is_logged_in"] = true;
-        // Nastavení ID uživatele
+        // Nastavenie ID uživatelľa
         $_SESSION["logged_in_user_id"] = $id;
 
 
