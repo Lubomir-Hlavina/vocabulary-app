@@ -23,25 +23,16 @@ if (isset($_GET["action"])) {
     } elseif ($_GET["action"] == "previous") {
         // Získa predchádzajúce ID karty
         $currentCardID = Card::getPreviousCardID($connection, $currentCardID);
-    }
-}
-
-if (isset($_GET["action"])) {
-    if ($_GET["action"] == "next") {
-        // Získa nasledujúce ID karty
-        $currentCardID = Card::getNextCardID($connection, $currentCardID);
-    } elseif ($_GET["action"] == "previous") {
-        // Získa predchádzajúce ID karty
-        $currentCardID = Card::getPreviousCardID($connection, $currentCardID);
     } elseif ($_GET["action"] == "random") {
         // Získa náhodné ID karty
         $currentCardID = Card::getRandomCard($connection)["id"];
     }
 }
 
-$currentCard = Card::getRandomCard($connection, "id, first_language, second_language");
+$currentCard = Card::getCard($connection, $currentCardID, "id, first_language, second_language");
 
-$_SESSION[0] = $currentCardID;
+// Uloží aktuálne ID karty do session
+$_SESSION['currentCardID'] = $currentCardID;
 ?>
 
 <!DOCTYPE html>
