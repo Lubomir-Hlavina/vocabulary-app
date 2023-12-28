@@ -162,23 +162,27 @@ class Card
 
     public static function getNextCardID($connection, $currentCardID)
     {
-        $sql = "SELECT id
-            FROM card
-            WHERE id > :currentCardID
-            ORDER BY id ASC
-            LIMIT 1";
-
+        $sql = "SELECT c.id
+                FROM user_card u
+                JOIN card c ON c.id = u.card_id
+                WHERE c.id > :currentCardID
+                AND u.user_id = :user_id
+                ORDER BY c.id ASC
+                LIMIT 1";
+    
         return self::getAdjacentCardID($connection, $sql, $currentCardID);
     }
 
     public static function getPreviousCardID($connection, $currentCardID)
     {
-        $sql = "SELECT id
-            FROM card
-            WHERE id < :currentCardID
-            ORDER BY id DESC
-            LIMIT 1";
-
+        $sql = "SELECT c.id
+                FROM user_card u
+                JOIN card c ON c.id = u.card_id
+                WHERE c.id < :currentCardID
+                AND u.user_id = :user_id
+                ORDER BY c.id DESC
+                LIMIT 1";
+    
         return self::getAdjacentCardID($connection, $sql, $currentCardID);
     }
 
@@ -186,7 +190,8 @@ class Card
     {
         $stmt = $connection->prepare($sql);
         $stmt->bindValue(":currentCardID", $currentCardID, PDO::PARAM_INT);
-
+        $stmt->bindValue(":user_id", $_SESSION['logged_in_user_id'], PDO::PARAM_INT);
+    
         try {
             if ($stmt->execute()) {
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -199,6 +204,7 @@ class Card
             echo "Typ chyby: " . $e->getMessage();
         }
     }
+    
 
 }
 
